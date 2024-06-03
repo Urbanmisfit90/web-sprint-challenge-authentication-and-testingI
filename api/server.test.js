@@ -91,3 +91,20 @@ describe('auth endpoints', () => {
     });
   });
 });
+describe('jokes endpoints', () => {
+  describe('[GET] /api/jokes', () => {
+    it('should respond with "token required" if no token is provided', async () => {
+      const res = await request(server).get('/api/jokes');
+      expect(res.status).toBe(401);
+      expect(res.body).toHaveProperty('message', 'token required');
+    });
+
+    it('should respond with "token invalid" if token is invalid', async () => {
+      const res = await request(server)
+        .get('/api/jokes')
+        .set('Authorization', 'invalid.token');
+      expect(res.status).toBe(401);
+      expect(res.body).toHaveProperty('message', 'token invalid');
+    });
+  });
+});
